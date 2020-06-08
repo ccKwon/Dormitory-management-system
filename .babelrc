@@ -1,0 +1,21 @@
+{
+    "presets": [
+      ["@babel/preset-env", { "modules": false }],
+      // ["@babel/env”, “@babel/react"]
+      // ["es2015", { "modules": false }],
+      // "stage-3"
+    ],
+    "plugins": [
+      "@babel/transform-runtime"
+    ]
+    // "plugins": [
+    //     ["component", 
+          
+    //         {
+    //           "libraryName": "element-ui",
+    //           "styleLibraryName": "theme-chalk"
+    //         }
+          
+    //     ]
+    // ]
+  }
