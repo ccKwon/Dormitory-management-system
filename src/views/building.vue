@@ -8,7 +8,7 @@
                 tooltip-effect="dark" style="width: 100%">
                 <!-- <el-table-column width="55">
                 </el-table-column> -->
-                <el-table-column align="center" sortable prop="bud" label="楼栋号">
+                <el-table-column align="center" sortable prop="Bud" label="楼栋号">
                     <!-- <template slot-scope="scope">{{ scope.row.sno }}</template> -->
                 </el-table-column>
                 <el-table-column align="center" sortable prop="floor" label="楼层号">
@@ -28,11 +28,16 @@
                 <el-button @click="toggleSelection()">取消选择</el-button>
             </div> -->
         </template>
-        <add-bud :dialogVisible.sync = "isShowAddBud" @getAdd = "addBud"></add-bud>
-        <edit-bud :dialogVisible.sync = "isShowEdit" :rowdata = "rowdata" @getedit="editBudinfo"></edit-bud>
-<!-- 
+        <add-bud :dialogVisible.sync="isShowAddBud" @getAdd="addBud"></add-bud>
+        <edit-bud :dialogVisible.sync="isShowEdit" :rowdata="rowdata" @getedit="editBudinfo"></edit-bud>
+        <!-- 
         <add-dorm :dialogVisible.sync="isShowAddDorm" @getAdd="addDorm"></add-dorm>
         <edit-dorm :dialogVisible.sync="isShowEdit" :rowdata="rowdata" @getedit="editDormtinfo"></edit-dorm> -->
+        <div class="pagination">
+            <el-pagination background layout="prev, pager, next" :total="this.totalPage"
+                @current-change="handleCurrentChange">
+            </el-pagination>
+        </div>
 
     </div>
 </template>
@@ -53,20 +58,38 @@
                 isShowAddBud: false,
                 isShowEdit: false,
                 rowdata: {},
+
+                totalPage: 0
             }
         },
 
         created() {
             this.getBuildinginfo();
+            this.getPage()
         },
 
 
         methods: {
+
+            handleCurrentChange(val) {
+                this.$axios.post('http://localhost:3000/page/api/list', {cate:'building', page:val}).then(res => {
+                    this.buildingInfo = res.data;
+                    // console.log(this.buildingInfo);
+                })
+            },
+
             editBudinfo(data) {
+                console.log(data);
                 this.buildingInfo.forEach((v, index) => {
-                    if (v.budid === data.budid) {
+                    if (v.Budid === data.Budid) {
                         Object.assign(this.buildingInfo[index], data);
                     }
+                })
+            },
+
+            getPage() {
+                this.$axios.get('http://localhost:3000/page/api/pagetotal?cate=building').then(res => {
+                    this.totalPage = res.data
                 })
             },
 
@@ -85,19 +108,19 @@
                 Object.assign(newBud, data);
                 this.buildingInfo.push(newBud);
 
-                this.$axios.post('/api/insertBud',newBud)
-                .then(res => {
-                    console.log(res)
-                })
-                .catch(err => {
-                    console.error(err); 
-                })
+                this.$axios.post('/api/insertBud', newBud)
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
             },
 
 
             // 获取楼栋信息
             getBuildinginfo() {
-                this.$axios.get('/api/getBudinfo').then( res => {
+                this.$axios.get('http://localhost:3000/building/api/buildingList').then(res => {
                     this.buildingInfo = res.data;
                     // console.log(this.buildingInfo);
                 })
@@ -110,17 +133,17 @@
             },
 
             handleDelete(index, row) {
-                this.$axios.post('/api/deleteBud',row)
-                .then(res => {
-                    this.buildingInfo.forEach((v, index) => {
-                        if (v.budid === row.budid) {
-                            this.buildingInfo.splice(index, 1);
-                        }
+                this.$axios.post('/api/deleteBud', row)
+                    .then(res => {
+                        this.buildingInfo.forEach((v, index) => {
+                            if (v.budid === row.budid) {
+                                this.buildingInfo.splice(index, 1);
+                            }
+                        })
                     })
-                })
-                .catch(err => {
-                    console.error(err); 
-                })
+                    .catch(err => {
+                        console.error(err);
+                    })
             },
         },
     }
@@ -136,5 +159,10 @@
             margin-left: auto;
             // margin-right: 210px;
         }
+    }
+
+    .pagination {
+        margin-top: 20px;
+        float: right;
     }
 </style>

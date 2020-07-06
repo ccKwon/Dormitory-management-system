@@ -3,13 +3,13 @@
         <el-dialog title="提示" :visible="dialogVisible" width="30%" :before-close="handleClose">
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="账号">
-                    <el-input @input="change($event)" v-model="form.bud"></el-input>
+                    <el-input @input="change($event)" v-model="form.Rname"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input @input="change($event)" v-model="form.dno"></el-input>
+                    <el-input @input="change($event)" v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
-                    <el-input @input="change($event)" v-model="form.sum"></el-input>
+                    <el-input @input="change($event)" v-model="form.password"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">修改</el-button>

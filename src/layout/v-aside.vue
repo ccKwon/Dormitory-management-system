@@ -2,7 +2,7 @@
 
   <div class="v-aside">
     <!-- 一级菜单 -->
-    <el-menu :default-active="this.$route.path" :router="true" active-text-color="#20a0ff" background-color="#354358"
+    <el-menu :default-active="this.index" :router="true" active-text-color="#20a0ff" background-color="#354358"
       class="menu-bar" text-color="#bfcbd9">
       <template v-for="menu in menuList">
         <!-- 一级选项 -->
@@ -28,6 +28,7 @@
       return {
         identity: 0,
         collapse: false,
+        index:''
       };
     },
 
@@ -94,7 +95,8 @@
 
     },
     mounted() {
-
+      console.log(typeof this.$route.path);
+      this.index = this.$route.path.slice(6)
     }
   };
 </script>

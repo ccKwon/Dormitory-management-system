@@ -5,7 +5,7 @@
         </div> -->
         <template>
             <el-table :data="List" border style="width: 100%">
-                <el-table-column align="center" prop="rname" label="维修员账号">
+                <el-table-column align="center" prop="Rname" label="维修员账号">
                 </el-table-column>
                 <el-table-column align="center" prop="name" label="维修员姓名">
                 </el-table-column>
@@ -19,8 +19,7 @@
             </el-table>
         </template>
 
-        <edit-repairman :dialogVisible.sync="isShowModifyRepairmen" @getedit="editrepairmentinfo" :rowdata="rowdata">
-        </edit-repairman>
+        <edit-repairmen :dialogVisible.sync="isShowModifyRepairmen" @getedit="editrepairmentinfo" :rowdata="rowdata"></edit-repairmen>
         <add-repairmen :dialogVisible.sync="isShowAddRepairmen"></add-repairmen>
     </div>
 </template>
@@ -35,6 +34,7 @@
                 List: [],
                 isShowModifyRepairmen: false,
                 isShowAddRepairmen: false,
+                rowdata:{},
             }
         },
 
@@ -53,15 +53,14 @@
 
         methods: {
             getList() {
-                this.$axios.get('/api/getrepairmenList').then(res => {
-                    // console.log(res.data);
+                this.$axios.post('http://localhost:3000/page/api/list', {cate:'repairmen'}).then(res => {
                     this.List = res.data;
                 })
             },
 
-            getedit() {
+            // getedit() {
 
-            },
+            // },
 
             showAddRepairmen() {
                 this.isShowAddRepairmen = true;
@@ -69,9 +68,14 @@
 
             ShowModifyStudent(row) {
                 this.isShowModifyRepairmen = true;
+                Object.assign(this.rowdata, row)
             },
 
             handleDelete(index, row) {
+
+            },
+
+            editrepairmentinfo(data) {
 
             }
         }

@@ -62,7 +62,10 @@
 
             onSubmit() {
                 // console.log(this.form);
-                this.$axios.get('/api/getDormByDno?dno=' + this.form.dno + "&bud=" + this.form.bud).then(res => {
+                this.$axios.get('http://localhost:3000/dorm/api/getdormBydno?dno=' + this.form.dno + "&bud=" + this.form.bud).then(res => {
+                    console.log(res.data.people);
+                    console.log(res.data.sum);
+                    console.log(res);
                     if (res.data.people === res.data.sum) {
                         this.toast = true;
                     } else {
