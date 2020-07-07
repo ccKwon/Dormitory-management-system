@@ -1,7 +1,29 @@
 <template>
     <div>
         <div class="top">
-            <el-button @click="showAddDorm" class="add" type="primary">添加宿舍</el-button>
+            <div class="search-con">
+                <!-- @submit.native.prevent="search" -->
+                <el-form @submit.native.prevent='search' class="search" inline>
+                    <el-form-item label="搜索">
+                        <el-input clearable placeholder="楼栋号、描述" prefix-icon="el-icon-search" size="medium"
+                            v-model="searchInfo.keyword" />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="searchInfo.Bud" placeholder="请选择">
+                            <el-option v-for="item in options.buildings" :key="item.Budid" :label="item.text"
+                                :value="item.Bud">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button native-type="submit" size="medium" type="primary">搜索
+                        </el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div class="add">
+                <el-button @click="showAddDorm" class="add" type="primary">添加宿舍</el-button>
+            </div>
         </div>
         <template class="main">
             <el-table :default-sort="{prop: 'dno', order: 'ascending'}" border ref="multipleTable" :data="dormInfo"
@@ -60,18 +82,60 @@
                 isShowEdit: false,
                 rowdata: {},
                 totalPage: 0,
+                searchInfo: {
+                    keyword: '',
+                    Bud: 0
+                },
+                options: {
+                    buildings: []
+                },
+                building: []
             }
         },
 
         created() {
             this.getDorminfo();
-            this.getPage()
+            this.getBuildinginfo()
         },
 
 
         methods: {
+
+            getBuildinginfo() {
+                this.$axios.get('http://localhost:3000/building/api/buildingList').then(res => {
+                    this.options.buildings = res.data;
+                    this.options.buildings.forEach(item => {
+                        item.text = item.Bud + '号楼'
+                    })
+                    this.options.buildings.unshift({
+                        Bud: 0,
+                        text: "全部"
+                    })
+                })
+
+            },
+
+            search() {
+                if (this.searchInfo.keyword !== '' && this.searchInfo.Bud !== 0) {
+                    console.log(111);
+                    this.totalPage = 1;
+                    this.searchList();
+                } else {
+                    this.getDorminfo();
+                }
+            },
+
+            searchList() {
+                this.$axios.post('http://localhost:3000/dorm/api/searchDorm', this.searchInfo).then(res => {
+                    this.dormInfo = res.data;
+                })
+            },
+
             handleCurrentChange(val) {
-                this.$axios.post("http://localhost:3000/page/api/list", {cate:'room',page:val}).then(res => {
+                this.$axios.post("http://localhost:3000/page/api/list", {
+                    cate: 'room',
+                    page: val
+                }).then(res => {
                     this.dormInfo = res.data;
                     // this.dormInfo.dno = this.dormInfo.bud + "#" + this.dormInfo.dno;
                     // console.log(this.dormInfo);
@@ -155,7 +219,7 @@
                 dataTemp.dno = dataTemp.bud + "#" + dataTemp.dno;
                 this.dormInfo.push(dataTemp);
                 dataTemp = null;
-                this.$axios.post("/api/insertDorm", data)
+                this.$axios.post("http://localhost:3000/dorm/api/insertDorm", data)
                     .then(res => {
                         // console.log(res)
                     })
@@ -178,6 +242,8 @@
                     // console.log(this.dormInfo);
                     this.DnoaddBud();
                 })
+                this.getPage()
+
             },
 
 
@@ -221,14 +287,31 @@
 
 <style lang="scss" scoped>
     .top {
-        height: 50px;
+        // height: 50px;
         display: flex;
-        align-items: center;
+        // align-items: center;
+        // justify-content: center;
+        padding: 10px 0;
 
         .add {
+            // line-height: 50px;
             margin-left: auto;
-            // margin-right: 210px;
+            margin-right: 50px;
         }
+
+        .search-con {
+            // line-height: 50px;
+            // padding-top: 15px;
+            margin-left: 20px;
+
+            .el-form-item {
+                margin-bottom: 0;
+            }
+
+            .search {}
+        }
+
+
     }
 
     .pagination {

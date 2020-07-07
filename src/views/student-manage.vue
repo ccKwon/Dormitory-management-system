@@ -1,9 +1,24 @@
 <template>
     <div>
-        <div class="top">
-            <el-button @click="showAddstudent" class="add" type="primary">添加学生</el-button>
-        </div>
         <template class="main">
+            <div class="top">
+                <div class="search-con">
+                    <!-- @submit.native.prevent="search" -->
+                    <el-form @submit.native.prevent='search' class="search" inline>
+                        <el-form-item label="搜索">
+                            <el-input clearable placeholder="学号、姓名" prefix-icon="el-icon-search" size="medium"
+                                v-model="searchInfo.keyword" />
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button native-type="submit" size="medium" type="primary">搜索
+                            </el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div class="add">
+                    <el-button @click="showAddstudent" size="medium" type="primary">添加学生</el-button>
+                </div>
+            </div>
             <el-table :default-sort="{prop: 'sno', order: 'ascending'}" border ref="multipleTable" :data="studentList"
                 tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
                 <!-- <el-table-column width="55">
@@ -37,7 +52,8 @@
             </div> -->
         </template>
 
-        <edit-student :dialogVisible.sync="isShowModifyStudent" @getedit="editstudentinfo" :rowdatatemp.sync="rowdatatemp">
+        <edit-student :dialogVisible.sync="isShowModifyStudent" @getedit="editstudentinfo"
+            :rowdatatemp.sync="rowdatatemp">
         </edit-student>
         <add-student :dialogVisible.sync="isShowAddStudent" @getAdd="addStudent"></add-student>
         <div class="pagination">
@@ -70,19 +86,48 @@
                 rowdata: {},
                 rowdatatemp: '',
                 multipleSelection: [],
-                totalPage: 0
+                totalPage: 0,
+                searchInfo: {
+                    keyword: ''
+                }
             }
         },
 
         created() {
-            this.getstudentList(),
-            this.getPage()
+            this.getstudentList()
+                // this.getPage()
         },
 
         methods: {
 
+            search() {
+                if (this.searchInfo.keyword !== '') {
+                    this.totalPage = 1;
+                    this.searchList();
+                } else {
+                    this.getstudentList();
+                }
+            },
+
+            searchList() {
+                this.$axios.post('http://localhost:3000/student/api/searchStudent', this.searchInfo).then(res => {
+                    this.studentList = res.data;
+                    for (let index = 0; index < this.studentList.length; index++) {
+                        if (this.studentList[index].Dno === 0 && this.studentList[index].Bud === 0) {
+                            this.studentList.splice(index, 1);
+                            index--;
+                        } else {
+                            this.studentList[index].date = this.studentList[index].date.slice(0, 10);
+                        }
+                    }
+                })
+            },
+
             handleCurrentChange(val) {
-                this.$axios.post("http://localhost:3000/page/api/list", {cate:'student',page:val})
+                this.$axios.post("http://localhost:3000/page/api/list", {
+                        cate: 'student',
+                        page: val
+                    })
                     .then(res => {
                         this.studentList = res.data;
                         for (let index = 0; index < this.studentList.length; index++) {
@@ -109,6 +154,9 @@
             addStudent(data) {
                 data.date = this.dateToString(data.date);
                 this.studentList.push(data);
+                this.$axios.post('http://localhost:3000/student/api/insertStudent', data).then(res => {
+                    console.log(res);
+                })
             },
 
             dateToString(date) {
@@ -197,7 +245,7 @@
                     .catch(err => {
                         console.error(err);
                     })
-
+                this.getPage();
             }
         }
     }
@@ -205,26 +253,40 @@
 
 
 <style lang="scss" scoped>
-    // el-table {
-    //     display: table-cell !important;
-    // }
-    .top {
-        height: 50px;
-        display: flex;
-        align-items: center;
+    .main {
 
-        .add {
-            margin-left: auto;
-            // margin-right: 210px;
+        // padding: 10px 0 ;
+        .top {
+            // height: 50px;
+            display: flex;
+            // align-items: center;
+            // justify-content: center;
+            padding: 10px 0;
+
+            .add {
+                // line-height: 50px;
+                margin-left: auto;
+                margin-right: 50px;
+            }
+
+            .search-con {
+                // line-height: 50px;
+                // padding-top: 15px;
+                margin-left: 20px;
+
+                .el-form-item {
+                    margin-bottom: 0;
+                }
+
+                .search {}
+            }
+
+
         }
     }
 
-    .main {
-        // padding: 10px 0 ;
-    }
-
     .pagination {
-        margin-top: 20px;
+        margin-top: 10px;
         float: right;
     }
 </style>

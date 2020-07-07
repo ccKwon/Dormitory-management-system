@@ -1,9 +1,25 @@
 <template>
     <div>
-        <div class="top">
-            <el-button @click="showAddBud" class="add" type="primary">添加楼栋</el-button>
-        </div>
+
         <template class="main">
+            <div class="top">
+                <div class="search-con">
+                    <!-- @submit.native.prevent="search" -->
+                    <el-form @submit.native.prevent='search' class="search" inline>
+                        <el-form-item label="搜索">
+                            <el-input clearable placeholder="楼栋号、描述" prefix-icon="el-icon-search" size="medium"
+                                v-model="searchInfo.keyword" />
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button native-type="submit" size="medium" type="primary">搜索
+                            </el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div class="add">
+                    <el-button @click="showAddBud" class="add" type="primary">添加楼栋</el-button>
+                </div>
+            </div>
             <el-table :default-sort="{prop: 'dno', order: 'ascending'}" border ref="multipleTable" :data="buildingInfo"
                 tooltip-effect="dark" style="width: 100%">
                 <!-- <el-table-column width="55">
@@ -59,20 +75,42 @@
                 isShowEdit: false,
                 rowdata: {},
 
-                totalPage: 0
+                totalPage: 0,
+
+                searchInfo: {
+                    keyword: ''
+                }
             }
         },
 
         created() {
             this.getBuildinginfo();
-            this.getPage()
         },
 
 
         methods: {
 
+            search() {
+                if (this.searchInfo.keyword !== '') {
+                    this.totalPage = 1;
+                    this.searchList();
+                } else {
+                    this.getBuildinginfo();
+                }
+            },
+
+            searchList() {
+                this.$axios.post('http://localhost:3000/building/api/searchBuilding', this.searchInfo).then(res => {
+                    console.log(res);
+                    this.buildingInfo = res.data;
+                })
+            },
+
             handleCurrentChange(val) {
-                this.$axios.post('http://localhost:3000/page/api/list', {cate:'building', page:val}).then(res => {
+                this.$axios.post('http://localhost:3000/page/api/list', {
+                    cate: 'building',
+                    page: val
+                }).then(res => {
                     this.buildingInfo = res.data;
                     // console.log(this.buildingInfo);
                 })
@@ -108,7 +146,7 @@
                 Object.assign(newBud, data);
                 this.buildingInfo.push(newBud);
 
-                this.$axios.post('/api/insertBud', newBud)
+                this.$axios.post('http://localhost:3000/building/api/insertBud', newBud)
                     .then(res => {
                         console.log(res)
                     })
@@ -124,6 +162,8 @@
                     this.buildingInfo = res.data;
                     // console.log(this.buildingInfo);
                 })
+                this.getPage()
+
             },
 
 
@@ -151,14 +191,31 @@
 
 <style lang="scss" scoped>
     .top {
-        height: 50px;
+        // height: 50px;
         display: flex;
-        align-items: center;
+        // align-items: center;
+        // justify-content: center;
+        padding: 10px 0;
 
         .add {
+            // line-height: 50px;
             margin-left: auto;
-            // margin-right: 210px;
+            margin-right: 50px;
         }
+
+        .search-con {
+            // line-height: 50px;
+            // padding-top: 15px;
+            margin-left: 20px;
+
+            .el-form-item {
+                margin-bottom: 0;
+            }
+
+            .search {}
+        }
+
+
     }
 
     .pagination {

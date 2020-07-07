@@ -3,7 +3,7 @@
         <el-dialog title="提示" :visible="dialogVisible" width="30%" :before-close="handleClose">
             <el-form ref="form" :model="form" label-width="80px" size="small">
                 <el-form-item label="楼号">
-                    <el-input v-model="form.bud"  ></el-input>
+                    <el-input v-model="form.Bud"  ></el-input>
                 </el-form-item>
                 <el-form-item label="楼层数">
                     <el-input v-model="form.floor" ></el-input>
@@ -31,7 +31,7 @@
                 // dialogVisible: false
                 form: {
                     // 楼号
-                    bud: '',
+                    Bud: '',
                     // 楼层数
                     floor: '',
                     // 描述
