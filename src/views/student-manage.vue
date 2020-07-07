@@ -278,7 +278,6 @@
                     margin-bottom: 0;
                 }
 
-                .search {}
             }
 
 

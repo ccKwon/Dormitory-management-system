@@ -131,18 +131,18 @@
 
     methods: {
       getsumList() {
-        this.$axios.get('/api/getsum').then(res => {
+        this.$axios.get('http://localhost:3000/dorm/api/getsum').then(res => {
           this.status_list.peopleandSum.prop = res.data.people + '/' + res.data.sum;
           this.status_list.emptybed.prop = res.data.sum - res.data.people;
         })
       },
       getCountList() {
-        this.$axios.get('/api/getCountDnoandStud').then(res => {
+        this.$axios.get('http://localhost:3000/dorm/api/getCountDnoandStud').then(res => {
           this.countlist = res.data;
         })
       },
       getrepairlistcount() {
-        this.$axios.get('/api/getlistcount').then(res => {
+        this.$axios.get('http://localhost:3000/repairList/api/getList').then(res => {
           this.status_list.repair.prop = res.data
         })
       }

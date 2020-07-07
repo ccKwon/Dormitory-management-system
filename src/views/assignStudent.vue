@@ -8,18 +8,18 @@
                 tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
                 <!-- <el-table-column width="55">
                 </el-table-column> -->
-                <el-table-column align="center" sortable prop="sno" label="学号" width="180">
+                <el-table-column align="center" sortable prop="Sno" label="学号" width="180">
                     <!-- <template slot-scope="scope">{{ scope.row.sno }}</template> -->
                 </el-table-column>
-                <el-table-column align="center" sortable prop="sname" label="姓名" width="150">
+                <el-table-column align="center" sortable prop="Sname" label="姓名" width="150">
                 </el-table-column>
-                <el-table-column align="center" sortable prop="ssex" label="性别" width="120">
+                <el-table-column align="center" sortable prop="Ssex" label="性别" width="120">
                 </el-table-column>
-                <el-table-column align="center" sortable prop="bud" label="楼号" width="150">
+                <el-table-column align="center" sortable prop="Bud" label="楼号" width="150">
                 </el-table-column>
-                <el-table-column align="center" sortable prop="dno" label="宿舍号" width="150">
+                <el-table-column align="center" sortable prop="Dno" label="宿舍号" width="150">
                 </el-table-column>
-                <el-table-column align="center" sortable prop="sdept" label="专业" width="150">
+                <el-table-column align="center" sortable prop="Sdept" label="专业" width="150">
                 </el-table-column>
                 <el-table-column align="center" label="操作">
                     <template slot-scope="scope">
@@ -63,7 +63,11 @@
         },
 
         created() {
+        },
+
+        mounted() {
             this.getstudentList()
+            
         },
 
         methods: {
@@ -91,8 +95,9 @@
                         var student = {};
                         Object.assign(student, data);
                         student.date = new Date(student.date)
+                        console.log(student.date);
                         // 更新数据库
-                        this.$axios.post("/api/updateStudent", student)
+                        this.$axios.post("http://localhost:3000/student/api/updateStudent", student)
                             .then(res => {
                                 console.log(res)
                             })
@@ -125,8 +130,8 @@
                 this.isShowModifyStudent = true;
                 // 浅拷贝 row 到 rowdata 
                 Object.assign(this.rowdata, row);
-                this.rowdata.dno = '';
-                this.rowdata.bud = '';
+                this.rowdata.Dno = '';
+                this.rowdata.Bud = '';
                 // this.rowdata.date = new Date(this.rowdata.date);s
                 // this.rowdata = row
             },
@@ -143,19 +148,18 @@
             },
 
             getstudentList() {
-                this.$axios.get('/api/getstudentList')
+                this.$axios.get('http://localhost:3000/student/api/getStudentList2')
                     .then(res => {
                         this.studentList = res.data;
                         for (let index = 0; index < this.studentList.length; index++) {
-                            if (this.studentList[index].dno !== 0 && this.studentList[index].bud !== 0) {
+                            if (this.studentList[index].Dno !== null && this.studentList[index].Bud !== null) {
                                 this.studentList.splice(index, 1);
                                 index--;
                             }
                         }
-
                         this.studentList.forEach(v => {
-                            v.dno = "未安排入寝";
-                            v.bud = "未安排入寝";
+                            v.Dno = "未安排入寝";
+                            v.Bud = "未安排入寝";
                         })
                     })
                     .catch(err => {
@@ -183,7 +187,5 @@
         }
     }
 
-    .main {
-        // padding: 10px 0 ;
-    }
+
 </style>

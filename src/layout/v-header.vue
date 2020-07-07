@@ -56,7 +56,7 @@
   .v-header {
     width: 100%;
     height: 60px;
-    background-color: #354358;
+    background-color: #293344;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -3,16 +3,16 @@
         <el-dialog title="提示" :visible="dialogVisible" width="30%" :before-close="handleClose">
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="学号:">
-                    {{ form.sno }}
+                    {{ form.Sno }}
                 </el-form-item>
                 <el-form-item label="姓名:">
-                    {{ form.sname }}
+                    {{ form.Sname }}
                 </el-form-item>
                 <el-form-item label="楼号">
-                    <el-input @input="change($event)" v-model="form.bud"></el-input>
+                    <el-input @input="change($event)" v-model="form.Bud"></el-input>
                 </el-form-item>
                 <el-form-item label="宿舍号">
-                    <el-input @input="change($event)" v-model="form.dno"></el-input>
+                    <el-input @input="change($event)" v-model="form.Dno"></el-input>
                 </el-form-item>
                 <p class="toast" v-if="toast">
                     该宿舍已满人 请安排其他宿舍
@@ -61,11 +61,8 @@
             },
 
             onSubmit() {
-                // console.log(this.form);
-                this.$axios.get('http://localhost:3000/dorm/api/getdormBydno?dno=' + this.form.dno + "&bud=" + this.form.bud).then(res => {
-                    console.log(res.data.people);
-                    console.log(res.data.sum);
-                    console.log(res);
+                this.$axios.get('http://localhost:3000/dorm/api/getdormBydno?Dno=' + this.form.Dno + "&Bud=" + this.form
+                    .Bud).then(res => {
                     if (res.data.people === res.data.sum) {
                         this.toast = true;
                     } else {
@@ -82,8 +79,7 @@
             },
 
             closeDialog() {
-
-                console.log(this.form);
+                this.toast = false;
                 this.$emit('update:dialogVisible', false);
             }
         }
