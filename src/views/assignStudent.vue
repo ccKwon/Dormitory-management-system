@@ -74,9 +74,7 @@
 
             // 接受添加学生子组件传过来的值
             addStudent(data) {
-                console.log(data);
                 data.date = this.dateToString(data.date);
-                console.log(data);
                 this.studentList.push(data);
             },
 

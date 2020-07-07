@@ -113,7 +113,7 @@
                 this.$axios.post('http://localhost:3000/student/api/searchStudent', this.searchInfo).then(res => {
                     this.studentList = res.data;
                     for (let index = 0; index < this.studentList.length; index++) {
-                        if (this.studentList[index].Dno === 0 && this.studentList[index].Bud === 0) {
+                        if (this.studentList[index].Dno === null && this.studentList[index].Bud === null) {
                             this.studentList.splice(index, 1);
                             index--;
                         } else {
@@ -131,7 +131,7 @@
                     .then(res => {
                         this.studentList = res.data;
                         for (let index = 0; index < this.studentList.length; index++) {
-                            if (this.studentList[index].Dno === 0 && this.studentList[index].Bud === 0) {
+                            if (this.studentList[index].Dno === null && this.studentList[index].Bud === null) {
                                 this.studentList.splice(index, 1);
                                 index--;
                             } else {
@@ -234,7 +234,7 @@
                     .then(res => {
                         this.studentList = res.data;
                         for (let index = 0; index < this.studentList.length; index++) {
-                            if (this.studentList[index].Dno === 0 && this.studentList[index].Bud === 0) {
+                            if (this.studentList[index].Dno === null && this.studentList[index].Bud === null) {
                                 this.studentList.splice(index, 1);
                                 index--;
                             } else {

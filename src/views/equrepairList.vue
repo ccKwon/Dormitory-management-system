@@ -105,10 +105,11 @@
                 this.$confirm('确定要开始处理改报修单吗？', '提示', {
                     type: "warning"
                 }).then(() => {
-                    console.log(this.userInfo);
-                    this.$axios.post('/api/updateList', {
+                    
+                    this.$axios.post('http://localhost:3000/repairList/api/updatelist', {
                             id: row.id,
-                            repairstatus: "2"
+                            repairstatus: "2",
+                            repairman: this.userInfo.account
                         })
                         .then(res => {
                             this.getData();

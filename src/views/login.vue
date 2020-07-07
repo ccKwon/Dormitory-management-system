@@ -105,10 +105,14 @@
                         try {
                             res = await this.$axios.post('/api/getstudentBySno', formdata);
                             if (res.data.token) {
+                                this.$axios.post('http://localhost:3000/student/api/getDormByid', res.data).then(res => {
+                                    let dorm_num = res.data.Bud + '#' + res.data.Dno;
+                                    formdata.dorm_num = dorm_num;
+                                })
                                 formdata.identity = 2;
                                 localStorage.setItem('id', formdata.account);
-
-                                formdata.account = res.data.Sname;
+                                formdata.Sno = res.data.Sno;
+                                formdata.account = res.data.name;
                                 this.$store.commit('getUserInfo', formdata)
                                 this.setdata(res, formdata);
 
@@ -127,9 +131,12 @@
                         try {
                             res = await this.$axios.post('/api/getrepairmen', formdata);
                             if (res.data.token) {
+                                this.$axios.post('http://localhost:3000/repairman/api/repairListByname', res.data).then(res => {
+                                    formdata.sum = res.data.sum;
+                                })
+
                                 formdata.identity = 3;
                                 localStorage.setItem('id', formdata.account);
-
                                 formdata.account = res.data.name;
                                 this.$store.commit('getUserInfo', formdata);
                                 this.setdata(res, formdata);

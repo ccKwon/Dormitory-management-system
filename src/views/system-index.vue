@@ -8,22 +8,22 @@
           <section>
             <div>
               <!-- <img :src="userInfo.avatar" alt="avatar" class="user_avatar" /> -->
-              <div >
+              <div class="name">
                 {{userInfo.account}}
               </div>
             </div>
 
             <div>
-              <section>
+              <section v-if="userInfo.identity === 1">
                 <p class="info-para">当前学生总数：{{countlist.countStud}} 人</p>
                 <p class="info-para">当前宿舍总数：{{countlist.countDno}} 间</p>
               </section>
-              <!-- <section v-if="userInfo.identity === 2">
+              <section v-if="userInfo.identity === 2">
                 <p class="info-para">我的宿舍：{{userInfo.dorm_num || '您还未被分配宿舍'}}</p>
               </section>
               <section v-if="userInfo.identity === 3">
-                <p class="info-para">已接手的报修单：{{userInfo.ongoing_task}}</p>
-              </section> -->
+                <p class="info-para">已接手的报修单：{{userInfo.sum}}</p>
+              </section>
 
             </div>
           </section>
@@ -70,7 +70,6 @@
 </template>
 
 <script>
-
   import {
     mapState
   } from "vuex";
@@ -125,8 +124,13 @@
 
     created() {
       this.getsumList(),
-      this.getCountList(),
-      this.getrepairlistcount()
+        this.getCountList(),
+        this.getrepairlistcount()
+    },
+
+    mounted() {
+      // this.getinfo()
+
     },
 
     methods: {
@@ -145,6 +149,9 @@
         this.$axios.get('http://localhost:3000/repairList/api/getList').then(res => {
           this.status_list.repair.prop = res.data
         })
+      },
+      getinfo() {
+        console.log(this.userInfo);
       }
     },
   }
@@ -159,6 +166,7 @@
       flex: 2;
       margin-top: 30px;
       padding: 20px;
+
       .user-card {
         height: 100%;
         box-sizing: border-box;
@@ -166,8 +174,13 @@
         align-items: center;
         // justify-content: center;
         padding: 0 !important;
+
+        .name {
+          padding: 10px 0;
+        }
+
         .info-para {
-          font-size: 12px;
+          font-size: 16px;
           color: gray;
         }
       }
@@ -187,6 +200,7 @@
           width: 50%;
           padding-top: 30px;
           padding-right: 30px;
+
           // padding-bottom: 30px;
           .status-card {
             height: 100px;
@@ -213,6 +227,7 @@
               align-items: center;
               justify-content: center;
               padding: 0 10px;
+
               .prop {
                 font-size: 22px;
                 font-weight: bold;

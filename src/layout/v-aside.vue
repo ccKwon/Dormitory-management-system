@@ -95,7 +95,6 @@
 
     },
     mounted() {
-      console.log(typeof this.$route.path);
       this.index = this.$route.path.slice(6)
     }
   };
