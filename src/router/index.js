@@ -67,6 +67,16 @@ var router = new Router({
                     path: "repairmen-manage",
                     name: "repairmen-manage",
                     component: () => import("../views/repairManage.vue")
+                },
+                {
+                    path: "school-leave-reg",
+                    name: "school-leave-reg",
+                    component: () => import("../views/leaveReg.vue")
+                },
+                {
+                    name: "school-leave-search",
+                    path: "school-leave-search",
+                    component: () => import("../views/leaveSearch.vue")
                 }
             ]
         }

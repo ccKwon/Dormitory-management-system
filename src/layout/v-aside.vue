@@ -28,7 +28,7 @@
       return {
         identity: 0,
         collapse: false,
-        index:''
+        index: ''
       };
     },
 
@@ -79,6 +79,12 @@
             show: identity === 1 || identity === 3
           },
           {
+            title: "离校登记查询",
+            index: "school-leave-search",
+            icon: "el-icon-map-location",
+            show: identity === 1
+          },
+          {
             title: "维修员管理",
             index: "repairmen-manage",
             icon: "el-icon-attract",
@@ -88,6 +94,12 @@
             title: "填写设备报修单",
             index: "equ-submit",
             icon: "el-icon-document-add",
+            show: identity === 2
+          },
+          {
+            title: "离校登记",
+            index: "school-leave-reg",
+            icon: "el-icon-delete-location",
             show: identity === 2
           },
         ]

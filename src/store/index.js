@@ -12,6 +12,7 @@ const getters = {
 
 const mutations = {
     getUserInfo(state, userinfo) {
+        // Object.assign(state.userInfo, userinfo)
         state.userInfo = userinfo;
     }
 };

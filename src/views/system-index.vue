@@ -124,8 +124,9 @@
 
     created() {
       this.getsumList(),
-        this.getCountList(),
-        this.getrepairlistcount()
+      this.getCountList(),
+      this.getrepairlistcount()
+      // this.getinfo()
     },
 
     mounted() {

@@ -38,6 +38,9 @@
 
         mounted() {},
 
+        beforeCreate() {
+            
+        },
 
         created() {
             if (!this.$store.state.userInfo.account) {
@@ -57,10 +60,15 @@
                 let userinfo = {};
                 if (user !== null) {
                     this.$axios.get('/api/getuser?account=' + user).then(res => {
-                        // console.log(res.data);
                         userinfo.account = res.data.name;
                         userinfo.password = res.data.password;
                         userinfo.identity = i;
+                        userinfo.Sno = res.data.Sno;
+                        this.$axios.post('http://localhost:3000/student/api/getDormByid', res.data).then(
+                        res => {
+                            let dorm_num = res.data.Bud + '#' + res.data.Dno;
+                            userinfo.dorm_num = dorm_num;
+                        })
                         // this.$store.dispatch("changeUserinfo",userinfo)
                         // this.$store.commit('getUserInfo', {})
                         this.$store.commit('getUserInfo', userinfo)

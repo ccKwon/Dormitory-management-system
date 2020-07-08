@@ -7,7 +7,18 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css';
 import axios from 'axios'
 
-
+// Vue.filter("convertToDate", function (value, type = "date") {
+//     if (value) {
+//         if (type === 'date') {
+//             return moment(value).format('YYYY-MM-DD');
+//         }
+//         if (type === 'datetime') {
+//             return moment(value).format('YYYY-MM-DD HH:mm:ss');
+//         }
+//     } else {
+//         return ""
+//     }
+// });
 // 添加请求头拦截  在请求头中加token
 // axios.interceptors.request.use(config => {
 //     // Do something before request is sent
